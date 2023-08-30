@@ -1,0 +1,523 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+
+            <a class="navbar-brand" href="#">AutoML</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/documentation">Documentation</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+
+    <br>
+    <br>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h4>Model training progress</h4>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-4">
+                <div class="progress" style="height: 30px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress"
+                        role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <h5 id="time">Time elapsed: 0 seconds</h5>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr class="table-secondary">
+                        <th scope="col">#</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Accuracy</th>
+                        <th scope="col">Balanced Accuracy</th>
+                        <th scope="col">Test set predictions</th>
+                        <th scope="col">Export model</th>
+                    </tr>
+                </thead>
+                <tbody id="table_body">
+
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <hr>
+        <div class="row" id="insights container">
+            <div class="row">
+                <h4>Model insights</h4>
+                <h5> </h5>
+            </div>
+
+            <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group"
+                    id="button_group_insights">
+            </div>
+
+
+            <!-- <div>
+                <div class="row">
+                    <div class="col col-4">
+                        <img src="static/model_results/roc.png" alt="roc">
+                    </div>
+                    <div class="col col-4">
+                        <img src="static/model_results/confusion_matrix.png" alt="confusion_matrix">
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th scope="col">#</th>
+                                    <th scope="col">First</th>
+                                    <th scope="col">Last</th>
+                                    <th scope="col">Handle</th>
+                                    <th scope="col">4th</th>
+                                    <th scope="col">4th</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>@mdo</td>
+                                    <td>@mdo</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                    <td>@fat</td>
+                                    <td>@fat</td>
+                                    <td>@fat</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td colspan="2">Larry the Bird</td>
+                                    <td>@twitter</td>
+                                    <td>@twitter</td>
+                                    <td>@twitter</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                    <td>@fat</td>
+                                    <td>@fat</td>
+                                    <td>@fat</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> -->
+            
+
+
+
+        </div>
+
+
+        <br>
+        <hr>
+        <div class="row" id="permutation container">
+            <div class="row">
+                <h4>Permutation Feature Importance</h4>
+                <h5> </h5>
+            </div>
+
+            <div class="row">
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group"
+                    id="button_group">
+                    <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked onclick="radioClick('AutoML')">
+                    <label class="btn btn-outline-primary" for="btnradio1">AutoML</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onclick="radioClick('SVM')">
+                    <label class="btn btn-outline-primary" for="btnradio2">SVM</label> -->
+                </div>
+            </div>
+
+            <div class="row" id="permutation_images">
+                <!-- <div id='permutationAutoML'>
+                    <img src="static/feature_importance/AutoML.png" alt="Permutation AutoML">
+                </div>
+                <div id='permutationSVM' style="display: none;">
+                    <img src="static/feature_importance/SVM.png" alt="Permutation AutoML">
+                </div> -->
+            </div>
+
+
+        </div>
+
+        <br>
+        <hr>
+        <div class="row">
+            <h5>Training settings</h5>
+
+            <ul class="list-group">
+                <li class="list-group-item">Features: {{columns}}</li>
+                <li class="list-group-item">Label: {{label}}</li>
+                <li class="list-group-item">Test set size (%): {{test_set_size}}</li>
+                <li class="list-group-item">Time left for this task: {{time_left_for_this_task}}</li>
+                <li class="list-group-item">Per run time limit: {{per_run_time_limit}}</li>
+                <li class="list-group-item">Cross validation: {{cv}} fold</li>
+            </ul>
+        </div>
+        <br>
+    </div>
+
+
+
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+    <script>
+
+        const timer = document.getElementById("time");
+        let current_time = 0;
+
+        const myInterval = setInterval(myTimer, 1000);
+        function myTimer() {
+            current_time++;
+            timer.innerHTML = 'Time elapsed: ' + current_time + ' seconds';
+        }
+
+        // progress bar
+        const progress = document.getElementById("progress");
+        const total_time = {{ time_left_for_this_task }} + 20;
+        const progressInterval = setInterval(updateProgress, 1000);
+        let percentage_complete = 0;
+        function updateProgress() {
+            percentage_complete = Math.round((current_time / total_time) * 100);
+            if (percentage_complete > 99) {
+                percentage_complete = 99;
+            }
+
+            progress.innerHTML = percentage_complete + '% completed';
+            progress.style = "width: " + percentage_complete + "%;";
+            // progress.aria-valuenow=percentage_complete+"";
+
+            if (percentage_complete === 99) {
+                clearInterval(progressInterval);
+
+
+            }
+        }
+
+        let row_count = 1;
+        table_body = document.getElementById('table_body');
+
+        fetch('http://127.0.0.1:3000/train_model?columns="{{ columns|safe }}"&time_left_for_this_task={{time_left_for_this_task}}&per_run_time_limit={{per_run_time_limit}}&dataset_filename={{dataset_filename}}&label={{label}}&test_set_size={{test_set_size}}&cv={{cv}}')
+            .then((response) => response.json())
+            .then((data_str) => {
+                // progress bar success
+                clearInterval(progressInterval);
+                progress.innerHTML = '100% completed';
+                progress.classList.add('bg-success');
+                progress.classList.remove('progress-bar-striped');
+                progress.classList.remove('progress-bar-animated');
+                progress.style = "width: 100%;";
+
+                // stop timer
+                clearInterval(myInterval);
+                timer.innerHTML = 'Completed in ' + current_time + ' seconds';
+
+                // parse the data. Response is a str
+                // console.log(data_str);
+                // console.log(typeof (data_str));
+                const data = JSON.parse(data_str);
+
+                const sortable = Object.entries(data)
+                    .sort(([,a],[,b]) => a - b).reverse()
+                    .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+
+                console.log(sortable);
+
+                for (key in sortable) {
+                    let child = document.createElement('tr');
+                    child.innerHTML = `<th scope="row">${row_count}</th>
+                                    <td>${key}</td>
+                                    <td>${data[key]['accuracy_score']}</td>
+                                    <td>${data[key]['balanced_accuracy_score']}</td>
+                                    <td><a class="btn btn-primary disabled csv_download" href="http://localhost:5000/uploads/${key}_predict_proba_cv.csv" download>Download</a></td>
+                                    <td><a class="btn btn-primary model_download" href="http://localhost:5000/uploads/${key}.sav" download>Export</a></td>`;
+                    // child = child.firstChild;
+                    table_body.appendChild(child);
+                    row_count++;
+                }
+
+                model_insights();
+                permutation();
+                get_results();
+            });
+
+
+
+
+
+
+
+    </script>
+    <script>
+        function get_results() {
+            fetch('http://127.0.0.1:3000/results_csv')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+
+                    csv_download = document.querySelectorAll('.csv_download');
+                    
+                    csv_download.forEach(a_tag => {
+                        a_tag.classList.remove("disabled");
+                    });
+                });
+        }
+
+        function model_insights() {
+            fetch('http://127.0.0.1:3000/predictions')
+                .then((response) => response.json())
+                .then((data) => {
+                     console.log(data);
+                    // console.log('inside insights');
+
+                    const parent_insights = document.getElementById('insights container');
+                    let insight_container;
+                    let div_outside_insight_container;
+                    let table_container;
+                    let table_html;
+                    
+                    let checked2 = 'checked';
+                    for (model_name in data['dataframes_list']) {
+                        // console.log(index);
+                        // model_name = data['dataframes_list'][index];
+                        // console.log(model_name);
+                        
+                        button_group_insights = document.getElementById('button_group_insights');
+                        button_group_insights.innerHTML += `<input type="radio" class="btn-check" name="btnradio_insights" id="btnradio_${model_name}_insights" autocomplete="off" ${checked2} onclick="radioClickInsights('${model_name}')">
+                                        <label class="btn btn-outline-primary" for="btnradio_${model_name}_insights">${model_name}</label>`;
+
+                        
+
+                        div_outside_insight_container = document.createElement('div');
+                        div_outside_insight_container.setAttribute("id", 'insight_' + model_name);
+
+                        if (checked2 === '') {
+                            div_outside_insight_container.setAttribute("style", 'display: none;');
+                        }
+
+                        checked2 = '';
+
+                        insight_container = document.createElement('div');
+                        insight_container.setAttribute("class", 'row');
+
+                        // insight_container.innerHTML = '<div class="row">';
+                        if (data['binary_classification']) {
+                            insight_container.innerHTML += `<div class="col">
+                                    <img src="static/model_results/${model_name}_roc.png" alt="roc">
+                                    </div>`;
+                        }
+
+                        insight_container.innerHTML += `<div class="col">
+                                <img src="static/model_results/${model_name}_confusion_matrix.png" alt="confusion_matrix">
+                            </div>`;
+
+                        // insight_container.innerHTML += '</div>'
+                        
+                        table_container = document.createElement('div');
+                        table_container.setAttribute("class", 'row');
+
+                        table_html = `<div class="col">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr class="table-secondary">
+                                                    <th scope="col"></th>`
+
+                        
+                        for (model_name_ in data['dataframes_list']) {
+                            for (table_header in data['dataframes_list'][model_name_]) {
+                                
+                                table_html += `<th scope="col">${table_header}</th>`;
+                                
+                            }
+                            break;
+                        }
+
+                        table_html += `</tr>
+                                    </thead>
+                                    <tbody>`;
+                            
+                        
+
+                        // draw the table
+                        
+                        let metrics = Object.keys(data['dataframes_list'][model_name]['f1-score']);
+                        console.log('drawing table for ' + model_name);
+
+                        for (row_num in metrics) {
+                            table_html += `<tr>`;
+                            let current_row = metrics[row_num];
+                            table_html += `<th scope="row">${current_row}</th>`;
+                            // console.log(current_row);
+
+                            for (table_header in data['dataframes_list'][model_name]) {
+                                // console.log(data['dataframes_list'][model_name][table_header][current_row]);
+                                table_html += `<td>${data['dataframes_list'][model_name][table_header][current_row]}</td>`;
+                            }
+
+                            // console.log();
+                            table_html += `</tr>`;
+                        }
+
+                        table_html += `</tbody>
+                                </table>
+                            </div>`;
+
+                        table_container.innerHTML = table_html;
+
+
+                        
+
+                        div_outside_insight_container.appendChild(insight_container);
+                        div_outside_insight_container.appendChild(table_container);
+
+                        parent_insights.appendChild(div_outside_insight_container);
+                    }
+
+                    
+
+
+
+
+
+
+                });
+        }
+
+        
+
+
+        function permutation() {
+            fetch('http://127.0.0.1:3000/permutation')
+                .then((response) => response.json())
+                .then((data) => {
+                    // console.log(data);
+
+                    button_group = document.getElementById("button_group");
+                    permutation_images = document.getElementById("permutation_images");
+
+                    let display = '';
+                    let checked = 'checked';
+
+
+
+                    for (key in data) {
+                        // let child = document.createElement('div');
+                        button_group.innerHTML += `<input type="radio" class="btn-check" name="btnradio" id="btnradio_${key}" autocomplete="off" ${checked} onclick="radioClick('${key}')">
+                                        <label class="btn btn-outline-primary" for="btnradio_${key}">${key}</label>`;
+                        // button_group.appendChild(child);
+
+                        let child = document.createElement('div');
+                        child.setAttribute("id", 'permutation' + key);
+                        child.setAttribute("style", display);
+                        child.innerHTML = `<img src="static/feature_importance/${key}.png" alt="${key}">`;
+                        permutation_images.appendChild(child);
+
+                        display = 'display: none;';
+                        checked = '';
+                    }
+
+                });
+        }
+        function radioClickInsights(name) {
+            const parent = document.getElementById('permutation_images');
+
+            const children = Array.from(parent.children);
+
+            const ids = children.map(element => {
+                return 'insight_' + element.id.slice(11);
+            });
+
+            console.log("ids" + ids);
+            // console.log(ids); 
+
+            for (image_id in ids) { // hide everything else
+                console.log('reading from image id ' + ids[image_id]);
+                let x = document.getElementById(ids[image_id]);
+                x.style.display = "none";
+            }
+
+            x = document.getElementById("insight_" + name);
+            console.log("insight_" + name)
+            x.style.display = "block";
+
+        }
+
+        function radioClick(name) {
+            const parent = document.getElementById('permutation_images');
+
+            const children = Array.from(parent.children);
+
+            const ids = children.map(element => {
+                return element.id;
+            });
+
+            // console.log(ids); 
+
+            for (image_id in ids) { // hide everything else
+                console.log('reading from image id ' + ids[image_id]);
+                let x = document.getElementById(ids[image_id]);
+                x.style.display = "none";
+            }
+
+            x = document.getElementById("permutation" + name);
+            console.log("permutation" + name)
+            x.style.display = "block";
+
+        }
+    </script>
+</body>
+
+</html>

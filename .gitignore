@@ -1,0 +1,5 @@
+datasets
+__pycache__/
+static/eda/
+static/feature_importance/
+static/model_results/

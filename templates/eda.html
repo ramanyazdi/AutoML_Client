@@ -1,0 +1,220 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+
+            <a class="navbar-brand" href="#">AutoML</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/documentation">Documentation</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+
+    <br>
+
+
+    <div class="container">
+        <!-- <div class="row">{{columns}}</div>
+        <div class="row">{{label}}</div> -->
+        <div class="row">
+            <h3>Describe dataset</h3>
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table-secondary">
+                        {% for col in column_names %}
+                        <th scope="col">{{col}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in row_data %}
+                    <tr>
+                        {% for col, row_ in zip(column_names, row) %}
+                        {% if col == link_column %}
+                        <th scope="row">{{row_}}</th>
+                        {% else %}
+                        <td>{{row_}}</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+        <hr>
+        <div class="row">
+            <h3>Label frequency</h3>
+            <div class="col">
+                <img src="static/eda/label_frequency.png" alt="Label frequency">
+            </div>
+        </div>
+        
+        <hr>
+        <div class="row">
+            <h3>Correlation heatmap</h3>
+            <img src="{{correlation_plot}}" alt="Correlation heatmap">
+        </div>
+        <hr>
+        
+        <div class="row">
+            <h3>Distribution plots</h3>
+            {% for plot in distplots %}
+
+
+            <div class="col col-3">
+                <img src="{{plot}}" alt="{{plot}}">
+            </div>
+
+
+            {% endfor %}
+        </div>
+        <hr>
+
+
+        <div class="row">
+            <h3>Select features for model training</h3>
+            <form action="/train" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col col-9">
+                        <!-- select features for automl -->
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="table-secondary">
+                                    {% for col in df_feature_column_names %}
+                                    <th scope="col">{{col}}</th>
+                                    {% endfor %}
+                                    <th scope="col">Use feature for training</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                {% for row in df_feature_row_data %}
+                                <tr>
+                                    {% for col, row_ in zip(df_feature_column_names, row) %}
+
+                                    <td>{{row_}}</td>
+
+                                    {% endfor %}
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="columns" type="checkbox"
+                                                value="{{row[0]}}" id="flexCheckDefault" checked>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <!-- training time -->
+                    <div class="col col-9">
+                        <div class="input-group">
+                            <span class="input-group-text">Total time to search for model (s)</span>
+                            <input type="number" aria-label="First name" class="form-control" name="time_left_for_this_task" value="300" required>
+                            <span class="input-group-text">Per run time limit (s)</span>
+                            <input type="number" aria-label="Last name" class="form-control" name="per_run_time_limit" value="30" required>
+                        </div>
+                    </div>
+                    <div class="col col-3">
+                        <div class="input-group">
+                            <span class="input-group-text">Folds for cv</span>
+                            <input type="number" aria-label="First name" class="form-control" name="cv_folds" value="10" required>
+                        </div>
+                    </div>
+
+                    <br>
+                    
+                </div>
+                <br>
+                <div class="row">
+                    
+                    <div class="col col-3">
+                        <div class="input-group">
+                            <span class="input-group-text">Test set size (%)</span>
+                            <input type="number" aria-label="First name" class="form-control" name="test_set_size" value="30" required>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col col-9">                  
+                        <input class="btn btn-primary" type="submit" value="Train model">         
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <h3>Data Improvement</h3>
+                    <body>
+                        <p>Consider the number of samples and label balance.
+                            If the number of samples are low or if the label frequency is imbalanced, you can improve them here.
+                        </p>
+                    </body>
+                    <input name="targetcolumn" value="{{ label }}" type="hidden">
+                    <p> Enter the desired number of times that you like to increase the minority class:  </p>
+                    <input type="number" aria-label="First name" class="form-control" name="desired_proportion">
+                    <div style="margin-bottom: 10px;"></div>      
+                    <button formaction="/smote" formmethod="post">Data Balancing</button>
+                    <!-- Add margin or padding here to create spacing -->
+                    <div style="margin-bottom: 20px;"></div>
+                    <p> Enter the desired total number of samples (rows) that you like your dataset to have:  </p>
+                    <input type="number" aria-label="First name" class="form-control" name="desired_row">
+                    <div style="margin-bottom: 10px;"></div>
+                     <button formaction="/augmentation" formmethod="post">Data Augmentation</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+
+
+
+</body>
+
+
+</html>
